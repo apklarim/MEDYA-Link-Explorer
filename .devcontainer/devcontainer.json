@@ -1,0 +1,20 @@
+{
+  "name": "MEDYA Link Explorer Android",
+
+  "image": "mcr.microsoft.com/devcontainers/java:17",
+
+  "features": {
+    "ghcr.io/devcontainers/features/android-sdk:1": {}
+  },
+
+  "postCreateCommand": "sdkmanager --licenses && sdkmanager \"platform-tools\" \"platforms;android-35\" \"build-tools;35.0.0\"",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-gradle",
+        "fwcd.kotlin"
+      ]
+    }
+  }
+}
