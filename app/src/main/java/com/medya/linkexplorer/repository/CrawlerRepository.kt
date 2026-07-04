@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class CrawlerRepository(
-    private val webCrawler: WebCrawler = WebCrawler()
+    private val crawler: WebCrawler = WebCrawler()
 ) {
 
     suspend fun startScan(
@@ -20,10 +20,13 @@ class CrawlerRepository(
 
         return@withContext try {
 
-            val result = webCrawler.crawl(startUrl, maxPages)
+            val result = crawler.crawl(
+                startUrl = startUrl,
+                maxPages = maxPages
+            )
 
-            result.forEach {
-                listener?.onLinkFound(it)
+            result.forEach { link ->
+                listener?.onLinkFound(link)
             }
 
             listener?.onCompleted(result.size)
