@@ -1,7 +1,5 @@
 package com.medya.linkexplorer.model
 
-import com.medya.linkexplorer.classifier.LinkType
-
 data class LinkInfo(
 
     val id: Long = 0L,
