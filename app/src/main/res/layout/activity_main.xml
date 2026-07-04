@@ -1,77 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="center"
+        android:text="MEDYA Link Explorer"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="MEDYA Link Explorer"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:gravity="center"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Başlangıç URL"/>
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:orientation="vertical">
 
         <EditText
-            android:id="@+id/editStartUrl"
+            android:id="@+id/editKeyword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="https://example.com"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Maksimum Sayfa"/>
+            android:hint="Anahtar kelime (isteğe bağlı)"/>
 
         <EditText
             android:id="@+id/editMaxPages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:inputType="number"
-            android:text="100"/>
+            android:text="100"
+            android:hint="Maksimum sayfa"/>
 
         <CheckBox
-            android:id="@+id/checkM3u"
+            android:id="@+id/checkM3U"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="M3U"/>
 
         <CheckBox
-            android:id="@+id/checkM3u8"
+            android:id="@+id/checkM3U8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="M3U8"/>
 
         <CheckBox
             android:id="@+id/checkXtream"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="Xtream"/>
 
         <CheckBox
-            android:id="@+id/checkMag"
+            android:id="@+id/checkMAG"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="MAG"/>
 
         <Button
             android:id="@+id/buttonStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:text="TARAMAYI BAŞLAT"/>
 
         <ProgressBar
@@ -79,21 +77,29 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="16dp"
+            android:max="100"/>
 
         <TextView
             android:id="@+id/textStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:text="Hazır"/>
-
-        <ListView
-            android:id="@+id/listResults"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_marginTop="16dp"/>
 
     </LinearLayout>
 
-</ScrollView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Bulunan Bağlantılar"
+        android:textStyle="bold"/>
+
+    <ListView
+        android:id="@+id/listResults"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>
