@@ -1,5 +1,7 @@
 package com.medya.linkexplorer.crawler
 
+import com.medya.linkexplorer.model.LinkType
+
 data class CrawledLink(
 
     val sourcePage: String,
@@ -7,4 +9,5 @@ data class CrawledLink(
     val url: String,
 
     val type: LinkType
+
 )
