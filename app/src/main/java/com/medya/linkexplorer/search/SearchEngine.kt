@@ -2,6 +2,8 @@ package com.medya.linkexplorer.search
 
 import com.medya.linkexplorer.crawler.CrawledLink
 import com.medya.linkexplorer.crawler.WebCrawler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class SearchEngine(
     private val crawler: WebCrawler = WebCrawler(),
@@ -10,21 +12,27 @@ class SearchEngine(
 
     suspend fun startScan(
         maxPages: Int = 100
-    ): List<CrawledLink> {
+    ): List<CrawledLink> = withContext(Dispatchers.IO) {
 
         val results = mutableListOf<CrawledLink>()
 
         discovery.getSources().forEach { source ->
 
-            val links = crawler.crawl(
-                startUrl = source.url,
-                maxPages = maxPages
-            )
+            try {
 
-            results.addAll(links)
+                val links = crawler.crawl(
+                    startUrl = source.url,
+                    maxPages = maxPages
+                )
+
+                results.addAll(links)
+
+            } catch (_: Exception) {
+                // Bir kaynak başarısız olursa diğer kaynaklarla devam et.
+            }
         }
 
-        return results
+        results
             .distinctBy { it.url }
             .sortedBy { it.url }
     }
