@@ -15,7 +15,7 @@
         android:theme="@style/Theme.MEDYALinkExplorer">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".M3uExplorerActivity"
             android:exported="true">
 
             <intent-filter>
