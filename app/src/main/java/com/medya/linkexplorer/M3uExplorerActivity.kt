@@ -24,11 +24,8 @@ class M3uExplorerActivity : AppCompatActivity() {
     private lateinit var chkMag: CheckBox
 
     private lateinit var btnStartScan: Button
-
     private lateinit var progressBar: ProgressBar
-
     private lateinit var txtStatus: TextView
-
     private lateinit var listResults: ListView
 
     private lateinit var adapter: ArrayAdapter<String>
@@ -50,11 +47,8 @@ class M3uExplorerActivity : AppCompatActivity() {
         chkMag = findViewById(R.id.chkMag)
 
         btnStartScan = findViewById(R.id.btnStartScan)
-
         progressBar = findViewById(R.id.progressBar)
-
         txtStatus = findViewById(R.id.txtStatus)
-
         listResults = findViewById(R.id.listResults)
 
         adapter = ArrayAdapter(
@@ -65,7 +59,7 @@ class M3uExplorerActivity : AppCompatActivity() {
 
         listResults.adapter = adapter
 
-        // Geçici örnek kaynak
+        // Test kaynağı
         searchEngine.addSource(
             name = "Example",
             url = "https://example.com"
@@ -81,11 +75,15 @@ class M3uExplorerActivity : AppCompatActivity() {
         results.clear()
         adapter.notifyDataSetChanged()
 
+        progressBar.progress = 0
         progressBar.isIndeterminate = true
+
         txtStatus.text = "Tarama başlatılıyor..."
 
         val keyword = edtKeyword.text.toString().trim()
-        val maxPages = edtMaxPages.text.toString().toIntOrNull() ?: 100
+
+        val maxPages =
+            edtMaxPages.text.toString().toIntOrNull() ?: 100
 
         lifecycleScope.launch {
 
@@ -108,19 +106,40 @@ class M3uExplorerActivity : AppCompatActivity() {
                     if (keyword.isBlank() ||
                         link.url.contains(keyword, true)
                     ) {
-                        results.add("$type\n${link.url}")
+
+                        results.add(
+                            "$type\n${link.url}"
+                        )
                     }
                 }
 
                 adapter.notifyDataSetChanged()
 
-                txtStatus.text = "Bulunan bağlantı: ${results.size}"
+                txtStatus.text =
+                    "Bulunan bağlantı: ${results.size}"
 
             } catch (e: Exception) {
 
                 progressBar.isIndeterminate = false
-                txtStatus.text = "Hata: ${e.message}"
+                progressBar.progress = 0
 
+                val errorText = buildString {
+
+                    append("Hata Türü : ")
+                    append(e.javaClass.simpleName)
+                    append("\n\n")
+
+                    append("Mesaj : ")
+                    append(e.message ?: "Mesaj yok")
+                    append("\n\n")
+
+                    append("Detay : ")
+                    append(e.toString())
+                }
+
+                txtStatus.text = errorText
+
+                e.printStackTrace()
             }
         }
     }
