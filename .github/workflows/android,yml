@@ -1,10 +1,10 @@
-name: Build Android APK
+name: Build MEDYA IPTV Player
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,9 +19,10 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
       - name: Grant execute permission
         run: chmod +x gradlew
@@ -32,5 +33,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: MEDYA-Link-Explorer-debug
+          name: MEDYA-IPTV-Player-debug
           path: app/build/outputs/apk/debug/*.apk
