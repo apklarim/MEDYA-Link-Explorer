@@ -10,7 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.medya.linkexplorer.repository.CrawlerRepository
+import com.medya.linkexplorer.search.SearchEngine
 import kotlinx.coroutines.launch
 
 class M3uExplorerActivity : AppCompatActivity() {
@@ -33,13 +33,12 @@ class M3uExplorerActivity : AppCompatActivity() {
 
     private lateinit var adapter: ArrayAdapter<String>
 
-    private val resultList = mutableListOf<String>()
+    private val results = mutableListOf<String>()
 
-    private val repository = CrawlerRepository()
+    private val searchEngine = SearchEngine()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_m3u_explorer)
 
         edtKeyword = findViewById(R.id.edtKeyword)
@@ -61,10 +60,16 @@ class M3uExplorerActivity : AppCompatActivity() {
         adapter = ArrayAdapter(
             this,
             android.R.layout.simple_list_item_1,
-            resultList
+            results
         )
 
         listResults.adapter = adapter
+
+        // Geçici örnek kaynak
+        searchEngine.addSource(
+            name = "Example",
+            url = "https://example.com"
+        )
 
         btnStartScan.setOnClickListener {
             startScan()
@@ -73,26 +78,20 @@ class M3uExplorerActivity : AppCompatActivity() {
 
     private fun startScan() {
 
-        resultList.clear()
+        results.clear()
         adapter.notifyDataSetChanged()
 
         progressBar.isIndeterminate = true
-
         txtStatus.text = "Tarama başlatılıyor..."
 
         val keyword = edtKeyword.text.toString().trim()
-
-        val maxPages =
-            edtMaxPages.text.toString().toIntOrNull() ?: 100
+        val maxPages = edtMaxPages.text.toString().toIntOrNull() ?: 100
 
         lifecycleScope.launch {
 
             try {
 
-                val links = repository.startScan(
-                    startUrl = "https://example.com",
-                    maxPages = maxPages
-                )
+                val links = searchEngine.startScan(maxPages)
 
                 progressBar.isIndeterminate = false
                 progressBar.progress = 100
@@ -109,30 +108,20 @@ class M3uExplorerActivity : AppCompatActivity() {
                     if (keyword.isBlank() ||
                         link.url.contains(keyword, true)
                     ) {
-
-                        resultList.add(
-                            "$type\n${link.url}"
-                        )
-
+                        results.add("$type\n${link.url}")
                     }
                 }
 
                 adapter.notifyDataSetChanged()
 
-                txtStatus.text =
-                    "Bulunan bağlantı: ${resultList.size}"
+                txtStatus.text = "Bulunan bağlantı: ${results.size}"
 
             } catch (e: Exception) {
 
                 progressBar.isIndeterminate = false
-
-                txtStatus.text =
-                    "Hata: ${e.message}"
+                txtStatus.text = "Hata: ${e.message}"
 
             }
-
         }
-
     }
-
 }
