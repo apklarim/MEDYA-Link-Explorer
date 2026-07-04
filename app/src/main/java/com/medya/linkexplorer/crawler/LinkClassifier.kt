@@ -1,19 +1,6 @@
 package com.medya.linkexplorer.crawler
 
-enum class LinkType {
-    HTML,
-    M3U,
-    M3U8,
-    XTREAM,
-    MAG,
-    JSON,
-    XML,
-    ZIP,
-    IMAGE,
-    VIDEO,
-    AUDIO,
-    UNKNOWN
-}
+import com.medya.linkexplorer.model.LinkType
 
 class LinkClassifier {
 
@@ -23,9 +10,11 @@ class LinkClassifier {
 
         return when {
 
-            lower.endsWith(".m3u") -> LinkType.M3U
+            lower.endsWith(".m3u") ->
+                LinkType.M3U
 
-            lower.endsWith(".m3u8") -> LinkType.M3U8
+            lower.endsWith(".m3u8") ->
+                LinkType.M3U8
 
             lower.contains("/player_api.php") ->
                 LinkType.XTREAM
