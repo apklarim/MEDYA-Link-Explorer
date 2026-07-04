@@ -4,32 +4,9 @@ import com.medya.linkexplorer.crawler.CrawledLink
 import com.medya.linkexplorer.crawler.WebCrawler
 
 class SearchEngine(
-    private val crawler: WebCrawler = WebCrawler()
+    private val crawler: WebCrawler = WebCrawler(),
+    private val discovery: SourceDiscoveryEngine = SourceDiscoveryEngine()
 ) {
-
-    /**
-     * Taranacak kaynaklar.
-     * İleride Ayarlar ekranından düzenlenebilir olacak.
-     */
-    private val sources = mutableListOf<String>()
-
-    fun addSource(url: String) {
-        if (url.isNotBlank() && !sources.contains(url)) {
-            sources.add(url)
-        }
-    }
-
-    fun removeSource(url: String) {
-        sources.remove(url)
-    }
-
-    fun clearSources() {
-        sources.clear()
-    }
-
-    fun getSources(): List<String> {
-        return sources.toList()
-    }
 
     suspend fun startScan(
         maxPages: Int = 100
@@ -37,10 +14,10 @@ class SearchEngine(
 
         val results = mutableListOf<CrawledLink>()
 
-        for (source in sources) {
+        discovery.getSources().forEach { source ->
 
             val links = crawler.crawl(
-                startUrl = source,
+                startUrl = source.url,
                 maxPages = maxPages
             )
 
@@ -49,5 +26,30 @@ class SearchEngine(
 
         return results
             .distinctBy { it.url }
+            .sortedBy { it.url }
+    }
+
+    fun addSource(
+        name: String,
+        url: String,
+        priority: Int = 0
+    ) {
+        discovery.addSource(
+            name = name,
+            url = url,
+            priority = priority
+        )
+    }
+
+    fun removeSource(url: String) {
+        discovery.removeSource(url)
+    }
+
+    fun clearSources() {
+        discovery.clear()
+    }
+
+    fun getSources(): List<SearchSource> {
+        return discovery.getSources()
     }
 }
